@@ -1,4 +1,5 @@
 import json
+import os
 import secrets
 
 from flask import Flask, abort, flash, g, redirect, render_template, request, session, url_for
@@ -29,6 +30,7 @@ def create_app(database=None):
         SECRET_KEY=config.SECRET_KEY,
         DATABASE=database or config.DATABASE,
         SESSION_COOKIE_SAMESITE="Lax",
+        SESSION_COOKIE_SECURE=os.environ.get("SECURE_COOKIES") == "1",  # set to 1 on an HTTPS site
     )
     app.teardown_appcontext(close_db)
     with app.app_context():
@@ -109,4 +111,4 @@ def create_app(database=None):
 
 
 if __name__ == "__main__":
-    create_app().run(debug=False)
+    create_app().run(debug=True)
