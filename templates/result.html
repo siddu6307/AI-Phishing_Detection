@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Result · Phishing Checker{% endblock %}
+{% block content %}
+{% set icon = {'Low': '🟢', 'Medium': '🟡', 'High': '🔴'}[item.level] %}
+<div class="card wide">
+  <div class="verdict {{ item.level|lower }}">
+    <div class="big">{{ icon }} {{ item.level }} risk</div>
+    <div>{{ item.advice }}</div>
+    <small>Risk score {{ item.score }}/100</small>
+  </div>
+
+  <h2>Why</h2>
+  <ul class="reasons">
+    {% for r in item.reasons %}<li>{{ r }}</li>{% endfor %}
+  </ul>
+
+  {% if item.links %}
+  <h2>Links found in this email</h2>
+  <p class="hint">Shown as plain text on purpose so you can't click them by accident.</p>
+  <table>
+    <tr><th>Link</th><th>Risk</th></tr>
+    {% for l in item.links %}
+    <tr><td class="url">{{ l.url }}</td><td><span class="pill {{ l.level|lower }}">{{ l.level }}</span></td></tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+
+  <h2>You checked ({{ item.type }})</h2>
+  <pre class="content">{{ item.content }}</pre>
+
+  <a class="btn link-btn" href="{{ url_for('dashboard') }}">Check another</a>
+</div>
+{% endblock %}

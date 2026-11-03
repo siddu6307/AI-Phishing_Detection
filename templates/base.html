@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Phishing Checker{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <nav>
+    <a class="brand" href="{{ url_for('index') }}">🎣 Phishing Checker</a>
+    {% if g.user %}
+    <form method="post" action="{{ url_for('auth.logout') }}" class="nav-right">
+      <a href="{{ url_for('dashboard') }}">Check</a>
+      <a href="{{ url_for('history') }}">History</a>
+      <span class="who">{{ g.user['email'] }}</span>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button class="btn small">Log out</button>
+    </form>
+    {% endif %}
+  </nav>
+  <main>
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+      <div class="flash {{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

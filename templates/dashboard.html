@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Check · Phishing Checker{% endblock %}
+{% block content %}
+<div class="card wide">
+  <h1>Check a link or email</h1>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <div class="tabs">
+      <label class="tab"><input type="radio" name="kind" value="link" {% if kind == 'link' %}checked{% endif %}> 🔗 Link</label>
+      <label class="tab"><input type="radio" name="kind" value="email" {% if kind == 'email' %}checked{% endif %}> ✉️ Email</label>
+    </div>
+    <textarea name="content" rows="9" maxlength="20000" required
+      placeholder="Paste the link, or the full email text here...">{{ content }}</textarea>
+    <button class="btn">Check now</button>
+  </form>
+  <p class="hint">Tip: for emails, paste the full message including headers ("Show original" / "View source") for the best result. Don't click any link you are checking.</p>
+</div>
+{% endblock %}

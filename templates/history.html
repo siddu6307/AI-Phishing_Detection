@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}History · Phishing Checker{% endblock %}
+{% block content %}
+<div class="card wide">
+  <h1>Your history</h1>
+  {% if items %}
+  <table>
+    <tr><th>Checked (UTC)</th><th>Type</th><th>Content</th><th>Risk</th><th></th></tr>
+    {% for it in items %}
+    <tr>
+      <td>{{ it.checked_at }}</td>
+      <td>{{ it.type }}</td>
+      <td class="url">{{ it.content[:60]|replace('\n', ' ') }}{% if it.content|length > 60 %}…{% endif %}</td>
+      <td><span class="pill {{ it.level|lower }}">{{ it.level }}</span></td>
+      <td><a href="{{ url_for('result', check_id=it.id) }}">View</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+  <form method="post" action="{{ url_for('history_clear') }}" onsubmit="return confirm('Delete all your history?')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button class="btn small danger">Clear history</button>
+  </form>
+  {% else %}
+  <p>No checks yet. <a href="{{ url_for('dashboard') }}">Check your first link or email</a>.</p>
+  {% endif %}
+</div>
+{% endblock %}
